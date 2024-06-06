@@ -1,0 +1,3 @@
+# Makefile
+all:
+  helm package .
