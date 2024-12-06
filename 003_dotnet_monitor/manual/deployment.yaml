@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1 # Adjust as needed
+  selector:
+    matchLabels:
+      app: aspnetapp-chiseled
+  template:
+    metadata:
+      labels:
+        app: aspnetapp-chiseled
+    spec:
+      containers:
+      - name: app
+        image: mcr.microsoft.com/dotnet/samples:aspnetapp-chiseled
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: DOTNET_DiagnosticPorts
+          value: /diag/dotnet-monitor.sock
+        resources:
+          limits:
+            cpu: 0.25
+            memory: "512Mi"
+        volumeMounts:
+        - name: diagvol
+          mountPath: /diag
+      - name: monitor
+        image: mcr.microsoft.com/dotnet/monitor:8
+        command:
+        - collect
+        - --no-auth # Warning: Use secure authentication in production
+        ports:
+        - containerPort: 52323
+          name: diagnostics
+          protocol: TCP
+        - containerPort: 52325
+          name: metrics
+          protocol: TCP
+        env:
+        - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
+          value: Listen
+        - name: DOTNETMONITOR_Storage__DefaultSharedPath
+          value: /diag
+        - name: DOTNETMONITOR_Urls
+          value: http://+:52323 # Use HTTPS in production
+        - name: DOTNETMONITOR_Metrics__Endpoints
+          value: http://+:52325
+        - name: Logging__Console__FormatterName
+          value: simple
+        resources:
+          requests:
+            cpu: 0.05
+            memory: "50Mi"
+          limits:
+            cpu: 0.25
+            memory: "256Mi"
+        volumeMounts:
+        - name: diagvol
+          mountPath: /diag
+      volumes:
+      - name: diagvol
+        emptyDir: {} # Use emptyDir for tmpfs-like behavior
