@@ -31,9 +31,7 @@ spec:
           mountPath: /diag
       - name: monitor
         image: mcr.microsoft.com/dotnet/monitor:8
-        command:
-        - collect
-        - --no-auth # Warning: Use secure authentication in production
+        args: [ "collect", "--no-auth" ]
         ports:
         - containerPort: 52323
           name: diagnostics
