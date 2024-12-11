@@ -60,6 +60,19 @@ spec:
         volumeMounts:
         - name: diagvol
           mountPath: /diag
+      - name: tool
+        image: busybox
+        args: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+        resources:
+          requests:
+            cpu: 0.05
+            memory: "50Mi"
+          limits:
+            cpu: 0.25
+            memory: "256Mi"
+        volumeMounts:
+        - name: diagvol
+          mountPath: /diag
       volumes:
       - name: diagvol
         emptyDir: {} # Use emptyDir for tmpfs-like behavior
