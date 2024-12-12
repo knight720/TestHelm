@@ -17,6 +17,11 @@ spec:
       containers:
       - name: app
         image: mcr.microsoft.com/dotnet/samples:aspnetapp
+        securityContext:
+          # Default APP_UID for non-root dotnet application images
+          runAsUser: 1654
+          runAsGroup: 1654
+          runAsNonRoot: true
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_URLS
