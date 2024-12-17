@@ -93,6 +93,23 @@ curl -o dump.dat http://127.0.0.1:5000/dump?pid=1&type=Full
 # 查詢 logs
 kubectl logs -c monitor deploy-exampleapp-7798fb4547-964x6
 ```
+- Helm
+```
+# 指定 kubeconfig
+export KUBECONFIG=~/.kube/other_kubeconfig
+
+# 套用 kubeconfig
+kubectl config use-context other_kubeconfig
+
+# 設定 namespace
+kubectl config set-context --current --namespace=other_namespace
+
+# 列出目前的 release
+helm list
+
+# 移除 RELEASE
+helm uninstall other_release_name
+```
 - dotnet monitor
 ```
 # get pid
