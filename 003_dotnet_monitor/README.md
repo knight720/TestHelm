@@ -23,6 +23,29 @@ app-1      | The runtime has been configured to pause during startup and is awai
 app-1      | DOTNET_DiagnosticPorts="/diag/dotnet-monitor.sock"
 app-1      | DOTNET_DefaultDiagnosticPortSuspend=0
 ```
+Rancher 手動調整後的錯誤訊息
+```
+2024-12-18T01:28:46.2657141Zfail: Microsoft.Diagnostics.Monitoring.WebApi.OutputStreamResult[1]
+      => SpanId:1ea460c84f76cd91, TraceId:381afe03858aebc221d79ef792e9ea6f, ParentId:0000000000000000 => ConnectionId:0HN8V0C2706BR => RequestPath:/dump RequestId:0HN8V0C2706BR:00000006 => Microsoft.Diagnostics.Monitoring.WebApi.Controllers.DiagController.CaptureDump (Microsoft.Diagnostics.Monitoring.WebApi) => ArtifactType:dump ArtifactSource_ProcessId:7 ArtifactSource_RuntimeInstanceCookie:b5d82260e798437b8a8de3466956a5f7
+      Request failed.
+      System.UnauthorizedAccessException: Access to the path '/diag/dumps/566366f4-b146-40b5-9ee6-35bf54ed84d8_7' is denied.
+       ---> System.IO.IOException: Permission denied
+         --- End of inner exception stack trace ---
+         at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+         at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+         at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+         at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+         at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+         at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
+         at Microsoft.Diagnostics.Monitoring.WebApi.DumpService.AutoDeleteFileStream..ctor(String path)
+         at Microsoft.Diagnostics.Monitoring.WebApi.DumpService.DumpAsync(IEndpointInfo endpointInfo, DumpType mode, CancellationToken token)
+         at Microsoft.Diagnostics.Tools.Monitor.DumpOperation.ExecuteAsync(Stream outputStream, CancellationToken token)
+         at Microsoft.Diagnostics.Monitoring.WebApi.OutputStreamResult.<>c__DisplayClass6_0.<<ExecuteResultAsync>b__0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.Diagnostics.Monitoring.WebApi.ActionContextExtensions.<>c__DisplayClass1_0.<<InvokeAsync>b__0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.Diagnostics.Monitoring.WebApi.ExecutionHelper.InvokeAsync[T](Func`2 action, ILogger logger, CancellationToken token)
+```
 - 241216  
 在 dotnet 8 使用 dotnet-mointor 6 錯誤訊息如下  
 deployment 的 spec.template.metadata.annotations 加上 monitoring.91app.io/inject-dotnet-monitor: 'true'
