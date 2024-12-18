@@ -174,5 +174,6 @@ http://127.0.0.1:52323/dump?pid=1&type=Full
 [MSDN](https://learn.microsoft.com/zh-tw/dotnet/core/diagnostics/dotnet-monitor)  
 [GitHub](https://github.com/dotnet/dotnet-monitor/blob/main/documentation/README.md)  
 [Running in Docker Compose](https://github.com/dotnet/dotnet-monitor/blob/main/documentation/docker-compose.md)  
-[Running in Kubernetes](https://github.com/dotnet/dotnet-monitor/blob/main/documentation/kubernetes.md)
-[Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+[Running in Kubernetes](https://github.com/dotnet/dotnet-monitor/blob/main/documentation/kubernetes.md)  
+[Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)  
+[Kyverno](https://kyverno.io/)
