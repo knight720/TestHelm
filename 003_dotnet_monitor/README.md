@@ -1,6 +1,28 @@
 # dotnet-monitor
 測試 dotnet-monitor 在 k8s 上是否可以 dump
 ## Note
+- 241218  
+compose_6.yaml, app 的 Diagnostic Port 有問題
+```
+Attaching to app-1, monitor-1
+monitor-1  | 2024-12-18T00:49:19.8413163Zinfo: Microsoft.Diagnostics.Tools.Monitor.Startup[60]
+monitor-1  |       Tell us about your experience with dotnet monitor: https://aka.ms/dotnet-monitor-survey
+monitor-1  | 2024-12-18T00:49:19.8468616Zwarn: Microsoft.Diagnostics.Tools.Monitor.Startup[13]
+monitor-1  |       WARNING: Authentication has been disabled. This can pose a security risk and is not intended for production environments.
+monitor-1  | 2024-12-18T00:49:20.4264833Zinfo: Microsoft.Hosting.Lifetime[14]
+monitor-1  |       Now listening on: http://[::]:52323
+monitor-1  | 2024-12-18T00:49:20.4265801Zinfo: Microsoft.Hosting.Lifetime[14]
+monitor-1  |       Now listening on: http://[::]:52325
+monitor-1  | 2024-12-18T00:49:20.8287861Zinfo: Microsoft.Hosting.Lifetime[0]
+monitor-1  |       Application started. Press Ctrl+C to shut down.
+monitor-1  | 2024-12-18T00:49:20.8311009Zinfo: Microsoft.Hosting.Lifetime[0]
+monitor-1  |       Hosting environment: Production
+monitor-1  | 2024-12-18T00:49:20.8311895Zinfo: Microsoft.Hosting.Lifetime[0]
+monitor-1  |       Content root path: /app/
+app-1      | The runtime has been configured to pause during startup and is awaiting a Diagnostics IPC ResumeStartup command from a Diagnostic Port.
+app-1      | DOTNET_DiagnosticPorts="/diag/dotnet-monitor.sock"
+app-1      | DOTNET_DefaultDiagnosticPortSuspend=0
+```
 - 241216  
 在 dotnet 8 使用 dotnet-mointor 6 錯誤訊息如下  
 deployment 的 spec.template.metadata.annotations 加上 monitoring.91app.io/inject-dotnet-monitor: 'true'
@@ -69,6 +91,9 @@ System.UnauthorizedAccessException: Access to the path \u0027/diag/dumps/a4f0b39
 - docker compose
 ```
 docker compose up
+
+# 指定檔案
+docker compose -f compose_6.yaml up
 ```
 - K8s
 ```

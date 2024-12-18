@@ -15,10 +15,10 @@ services:
           memory: 512M
 
   monitor:
-    image: mcr.microsoft.com/dotnet/monitor:8
+    image: mcr.microsoft.com/dotnet/monitor:6
     # DO NOT use the --no-auth argument for deployments in production; this argument is used for demonstration
     # purposes only in this example. Please continue reading after this example for further details.
-    command: ["collect", "--no-auth"]
+    command: ["--no-auth"]
     ports:
       - "52323:52323"
       - "52325:52325"
@@ -33,6 +33,7 @@ services:
       # The image will output logging in a json format by default, which is great for ingestion by tools such as Azure Monitor Log Analytics.
       # Switch the logging format to simple for this sample for easier reading.
       - Logging__Console__FormatterName=simple
+      - DOTNETMONITOR_DiagnosticPort__EndpointName=/diag/dotnet-monitor.sock
     volumes:
       - diagvol:/diag
     deploy:
